@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Laker Logic Gym</title>
+<link rel="stylesheet" href="style.css" />
+</head>
+<body>
+<header class="topbar">
+  <button id="menu-btn" class="icon-btn" aria-label="Show problem list">☰</button>
+  <div class="brand">
+    <h1>Laker Logic Gym</h1>
+    <p>Practice natural deduction proofs</p>
+  </div>
+  <button id="theme-btn" class="text-btn">Dark / light</button>
+</header>
+
+<div class="layout">
+  <nav id="sidebar" aria-label="Problems">
+    <div id="progress-summary"></div>
+    <div id="set-list"></div>
+    <button id="custom-btn" class="side-link">✎ Try your own argument</button>
+  </nav>
+
+  <main id="main">
+    <section id="problem-view" hidden>
+      <div class="crumb" id="crumb"></div>
+      <p class="note" id="set-note"></p>
+      <div class="warn" id="problem-warn" hidden></div>
+
+      <div class="argument" id="argument"></div>
+
+      <div class="palette" aria-label="Insert symbol">
+        <span class="palette-label">Insert:</span>
+        <button data-sym="~" title="not (type ~)">~</button>
+        <button data-sym="•" title="and (type &amp; or .)">•</button>
+        <button data-sym="∨" title="or (type v)">∨</button>
+        <button data-sym="⊃" title="if-then (type &gt;)">⊃</button>
+        <button data-sym="≡" title="if and only if (type =)">≡</button>
+        <button data-sym="(">(</button>
+        <button data-sym=")">)</button>
+        <span class="palette-help">or type <kbd>~</kbd> <kbd>&amp;</kbd> <kbd>v</kbd> <kbd>&gt;</kbd> <kbd>=</kbd></span>
+      </div>
+
+      <div class="proof" id="proof" role="table" aria-label="Proof"></div>
+
+      <div class="proof-actions">
+        <button id="add-line" class="btn">+ Add line</button>
+        <button id="copy-proof" class="btn ghost">Copy proof</button>
+        <button id="clear-proof" class="btn ghost">Start over</button>
+      </div>
+
+      <div class="status" id="status" aria-live="polite"></div>
+
+      <details class="rules" id="rules">
+        <summary>Rules reference</summary>
+        <div id="rules-body"></div>
+      </details>
+    </section>
+
+    <section id="custom-view" hidden>
+      <h2>Try your own argument</h2>
+      <p class="note">Type the premises separated by commas, then a slash, then the conclusion.
+        All rules are available.</p>
+      <form id="custom-form" class="custom-form">
+        <input id="custom-input" autocomplete="off" spellcheck="false" placeholder="P > Q, Q > R / P > R" />
+        <button class="btn" type="submit">Start proof</button>
+      </form>
+      <p class="error-text" id="custom-error"></p>
+    </section>
+
+    <section id="welcome-view" hidden>
+      <h2>Welcome!</h2>
+      <p>Pick a problem from the list. Each proof starts with the premises; add lines until you reach
+        the conclusion. Every line needs a justification: the line numbers it uses and the rule, such as
+        <code>1, 2 MP</code>.</p>
+      <p>For a conditional proof, write <code>ACP</code> as the justification of the assumption.
+        Close the subproof with a line justified like <code>3-5 CP</code>.
+        Indirect proof works the same way with <code>AIP</code> and <code>IP</code>.</p>
+    </section>
+  </main>
+</div>
+
+<script src="logic.js"></script>
+<script src="problems.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
