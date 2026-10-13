@@ -1,0 +1,20 @@
+title: Predicate Logic
+Predicate logic: Logic that looks inside simple statements, splitting them into predicates and the things they're about. Also called quantificational logic.
+Predicate: A capital letter that stands for a property or relation, such as H for "is human".
+Individual constant: A lowercase letter (a through w) that names a particular thing, such as s for "Socrates".
+Individual variable: A lowercase x, y or z that stands for any thing, used with quantifiers.
+Singular statement: A statement that says something about a named individual, such as Hs ("Socrates is human").
+Universal quantifier: The symbol (x), read "for all x" or "everything x is such that".
+Existential quantifier: The symbol (∃x), read "there exists an x such that" or "something x is such that".
+Scope: The part of a statement a quantifier governs: the statement right after it, or the whole group in parentheses after it.
+Bound variable: A variable inside the scope of a quantifier for that same variable.
+Free variable: A variable that is not bound by any quantifier. Premises and conclusions may not contain free variables.
+Statement function: An expression with a free variable, such as Hx, which is neither true nor false until the variable is bound or replaced by a name.
+Instantiation: Removing a quantifier and replacing its variable with a name or variable (UI and EI).
+Generalization: Adding a quantifier in place of a name or variable (UG and EG).
+Universal statement: A statement whose main operator is a universal quantifier. "All S are P" is translated (x)(Sx ⊃ Px).
+Particular statement: A statement whose main operator is an existential quantifier. "Some S are P" is translated (∃x)(Sx • Px).
+Relational predicate: A predicate that relates two or more things, such as Lab for "a loves b".
+Universe of discourse: The collection of things the variables range over. Also called the domain.
+Finite universe method: Showing an argument is invalid by finding a small universe (say, two things) in which the premises are true and the conclusion false.
+Quantifier negation (QN): The rule that ~(x) is equivalent to (∃x)~, and ~(∃x) is equivalent to (x)~.

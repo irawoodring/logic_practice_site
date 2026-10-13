@@ -1,4 +1,4 @@
-# Builds the site from the problems/ folder and publishes it to GitHub Pages
+# Builds the site from the problems/ and glossary/ folders and publishes it to GitHub Pages
 # on every push to main. In the repository's Settings → Pages, set
 # "Source" to "GitHub Actions".
 name: Deploy site
@@ -30,7 +30,7 @@ jobs:
         with:
           node-version: 20
 
-      - name: Collect problems
+      - name: Collect problems and glossary
         run: node build.js
 
       - uses: actions/configure-pages@v5

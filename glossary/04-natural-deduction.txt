@@ -1,0 +1,16 @@
+title: Natural Deduction
+note: Words used when building proofs. The rules themselves are in each problem's Rules reference.
+Natural deduction: A method of proving an argument valid by deriving its conclusion from its premises one step at a time, each step justified by a rule.
+Proof: A sequence of lines that begins with the premises and ends with the conclusion, where every other line follows from earlier lines by a rule.
+Justification: The note beside a line that says which earlier lines and which rule it comes from, such as "1, 2 MP".
+Rule of implication: A rule that lets you infer a new line from one or more whole earlier lines, such as Modus Ponens. It works only on entire lines, in one direction.
+Rule of replacement: A rule stating that two forms are logically equivalent, such as De Morgan's Rule. It can be applied to part of a line, in either direction.
+Assumption: A line that is not a premise but is supposed true for the sake of a subproof, marked ACP or AIP.
+Conditional proof (CP): Assume the antecedent (ACP), derive the consequent, then conclude the whole conditional. The assumption is then discharged.
+Indirect proof (IP): Assume the opposite of what you want (AIP), derive a contradiction, then conclude the negation of the assumption. Also called reductio ad absurdum.
+Subproof: The indented lines that begin with an assumption and end when it is discharged by CP or IP. Lines inside a closed subproof can't be cited afterward.
+Discharge: To close a subproof with CP or IP, ending the assumption's scope.
+Contradiction: A statement of the form p • ~p.
+Theorem: A statement that can be proved with no premises at all. Every theorem is tautologous.
+Affirming the consequent: The invalid form p ⊃ q, q ∴ p. Not a rule!
+Denying the antecedent: The invalid form p ⊃ q, ~p ∴ ~q. Not a rule!

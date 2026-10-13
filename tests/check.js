@@ -5,7 +5,7 @@
 //   node tests/check.js
 'use strict';
 const Logic = require('../logic.js');
-const { collect } = require('../build.js');
+const { collect, collectGlossary } = require('../build.js');
 const SOLUTIONS = require('./solutions.js');
 const UNIT = require('./unit.js');
 
@@ -42,6 +42,11 @@ for (const key of Object.keys(SOLUTIONS)) {
   if (![...sets].some((s) => s.problems.some((p) => p.key === key))) {
     console.log(`  (note) solution for "${key}" doesn't match any problem`);
   }
+}
+
+console.log('\nGlossary');
+for (const topic of collectGlossary()) {
+  topic.errors.forEach((e) => fail(`${topic.file}: ${e}`));
 }
 
 console.log('\nChecker unit tests');

@@ -93,7 +93,8 @@
   // ------------------------------------------------------------- views
 
   function show(view) {
-    for (const v of ['problem-view', 'custom-view', 'welcome-view']) $(v).hidden = v !== view;
+    for (const v of ['problem-view', 'custom-view', 'glossary-view', 'welcome-view']) $(v).hidden = v !== view;
+    $('vocab-link').classList.toggle('active', view === 'glossary-view');
     document.body.classList.remove('menu-open');
     window.scrollTo(0, 0);
   }
@@ -115,6 +116,11 @@
       if (p.error) { showCustom(m[2], p.error, tt); return; }
       p.uid = 'custom-' + p.id;
       openProblem(p, null, tt ? 'Your own truth table' : 'Your own argument', L.ALL_RULES);
+    } else if (h === '/glossary') {
+      current = null;
+      renderSidebar();
+      show('glossary-view');
+      renderGlossary();
     } else if (h === '/custom') {
       showCustom('', '', false);
     } else {
@@ -562,6 +568,60 @@
     saveTT();
     renderTruthTable();
   });
+
+  // ------------------------------------------------------------- glossary
+
+  const glossary = window.GLOSSARY || [];
+
+  // Appends text to parent, wrapping each case-insensitive match of q in <mark>.
+  function appendHighlighted(parent, text, q) {
+    if (!q) { parent.append(text); return; }
+    const lower = text.toLowerCase();
+    let i = 0, j;
+    while ((j = lower.indexOf(q, i)) !== -1) {
+      parent.append(text.slice(i, j), el('mark', '', text.slice(j, j + q.length)));
+      i = j + q.length;
+    }
+    parent.append(text.slice(i));
+  }
+
+  function renderGlossary() {
+    const q = $('glossary-search').value.trim().toLowerCase();
+    const body = $('glossary-body');
+    const topics = $('glossary-topics');
+    body.innerHTML = '';
+    topics.innerHTML = '';
+    let shown = 0;
+    glossary.forEach((topic, ti) => {
+      const terms = topic.terms.filter((t) => !q ||
+        t.term.toLowerCase().includes(q) || t.definition.toLowerCase().includes(q));
+      if (!terms.length) return;
+      shown += terms.length;
+
+      const section = el('section', 'glossary-topic');
+      section.id = 'topic-' + ti;
+      section.appendChild(el('h3', '', topic.title));
+      if (topic.note && !q) section.appendChild(el('p', 'note', topic.note));
+      const dl = el('dl');
+      for (const t of terms) {
+        const dt = el('dt');
+        appendHighlighted(dt, t.term, q);
+        const dd = el('dd');
+        appendHighlighted(dd, t.definition, q);
+        dl.append(dt, dd);
+      }
+      section.appendChild(dl);
+      body.appendChild(section);
+
+      const chip = el('button', 'chip', topic.title);
+      chip.addEventListener('click', () => section.scrollIntoView({ behavior: 'smooth', block: 'start' }));
+      topics.appendChild(chip);
+    });
+    $('glossary-empty').hidden = shown > 0;
+    $('glossary-empty').textContent = glossary.length ? 'No matching terms.' : 'No glossary terms loaded. Run "node build.js".';
+  }
+
+  $('glossary-search').addEventListener('input', renderGlossary);
 
   // ------------------------------------------------------------- toolbar
 

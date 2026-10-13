@@ -1,0 +1,10 @@
+title: Symbols
+note: How to type each symbol on this site.
+~ (tilde): Not. Type ~ or !.
+• (dot): And. Type & or a period.
+∨ (wedge): Or. Type a lowercase v.
+⊃ (horseshoe): If-then. Type > or ->.
+≡ (triple bar): If and only if. Type = or <->.
+(x): For all x. Type (x).
+(∃x): There exists an x. Type (Ex) or use the ∃ button.
+∴: Therefore; marks the conclusion of an argument.

@@ -1,0 +1,20 @@
+title: Arguments
+note: The basic ideas behind every problem on this site.
+Statement: A sentence that is either true or false. Also called a proposition.
+Argument: A group of statements, one or more of which (the premises) are claimed to provide support for another (the conclusion).
+Premise: A statement in an argument that is offered as evidence or a reason for the conclusion.
+Conclusion: The statement in an argument that the premises are claimed to support.
+Inference: The reasoning process expressed by an argument: moving from premises to a conclusion.
+Premise indicator: A word or phrase that signals a premise, such as "since", "because", "for" or "given that".
+Conclusion indicator: A word or phrase that signals a conclusion, such as "therefore", "thus", "hence" or "consequently".
+Deductive argument: An argument in which the premises are claimed to make the conclusion necessary: if the premises are true, the conclusion cannot be false.
+Inductive argument: An argument in which the premises are claimed to make the conclusion probable but not certain.
+Valid: Describes a deductive argument in which it is impossible for all the premises to be true and the conclusion false. Validity depends only on form, not on whether the premises are actually true.
+Invalid: Describes a deductive argument in which it is possible for all the premises to be true and the conclusion false.
+Sound: Describes a deductive argument that is valid and has all true premises. A sound argument's conclusion must be true.
+Unsound: Describes a deductive argument that is invalid, has at least one false premise, or both.
+Strong: Describes an inductive argument in which, if the premises are true, the conclusion is probably true.
+Weak: Describes an inductive argument in which the conclusion does not probably follow from the premises.
+Cogent: Describes an inductive argument that is strong and has all true premises.
+Argument form: The pattern of an argument, with its statements replaced by letters. Every argument with a valid form is valid.
+Counterexample: A case (a substitution, row of a truth table or interpretation) in which the premises of an argument form are all true and the conclusion is false. Finding one shows the form is invalid.

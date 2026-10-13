@@ -18,6 +18,9 @@ Proofs use the rules from Hurley's *A Concise Introduction to Logic*:
 
 Identity (`a = b`) isn't supported yet.
 
+There's also a searchable **Vocabulary** page of definitions, built from the
+`glossary/` folder.
+
 
 ## Adding problems
 
@@ -43,11 +46,25 @@ Typos and arguments that can't be proved show a ⚠ on the site. GitHub also
 checks every commit: a red ✗ on the **Actions** tab (and an email) names the
 file with the mistake.
 
+## Adding vocabulary
+
+Each file in **`glossary/`** is a topic on the Vocabulary page, and each line
+is a term:
+
+```
+title: Truth Tables
+Tautologous: Describes a statement that is true in every row of its truth table.
+```
+
+Add a line to add a term, or a new `.txt` file to add a topic. See
+[`glossary/README.md`](glossary/README.md).
+
 ## Publishing with GitHub Pages
 
 The page can't list a folder by itself, so a GitHub Action
 ([`.github/workflows/deploy.yml`](.github/workflows/deploy.yml)) collects
-`problems/` into one file on every push to `main` and publishes the site.
+`problems/` and `glossary/` into one file on every push to `main` and
+publishes the site.
 
 One-time setup: in the repository, go to **Settings → Pages** and set
 **Source** to **GitHub Actions**. The site will be at
@@ -58,12 +75,12 @@ One-time setup: in the repository, go to **Settings → Pages** and set
 With [Node.js](https://nodejs.org) installed:
 
 ```
-node build.js          # collects problems/ into problems.generated.js
+node build.js          # collects problems/ and glossary/ into generated.js
 node tests/check.js    # reports typos, duplicates and invalid arguments
 ```
 
 Then open `index.html` in a browser. Run `node build.js` again after changing
-problems. `tests/solutions.js` holds sample proofs that the check script runs
+problems or vocabulary. `tests/solutions.js` holds sample proofs that the check script runs
 (adding solutions there is optional).
 
 Students can also type in their own problems with **Try your own problem**.
@@ -75,7 +92,8 @@ Progress is saved in each student's browser.
 | File | Purpose |
 | --- | --- |
 | `problems/` | The problems: add files here |
-| `build.js` | Collects `problems/` into `problems.generated.js` |
+| `glossary/` | Vocabulary terms: add lines or files here |
+| `build.js` | Collects `problems/` and `glossary/` into `generated.js` |
 | `logic.js` | Parser, proof checker and truth tables |
 | `app.js` | Page behavior |
 | `index.html`, `style.css` | Layout and styling |

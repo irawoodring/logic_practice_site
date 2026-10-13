@@ -1,0 +1,12 @@
+title: Truth Tables
+Truth value: The truth or falsity of a statement: T or F.
+Truth-functional: Describes a compound statement whose truth value is completely determined by the truth values of its parts.
+Truth table: A table showing the truth value of a statement for every possible combination of truth values of its simple statements. With n letters there are 2ⁿ rows.
+Tautologous: Describes a statement that is true in every row of its truth table. Also called a tautology or logical truth.
+Self-contradictory: Describes a statement that is false in every row of its truth table. Also called a contradiction.
+Contingent: Describes a statement that is true in some rows and false in others.
+Logically equivalent: Describes two statements that have the same truth value in every row.
+Contradictory statements: Two statements that have opposite truth values in every row.
+Consistent: Describes statements for which there is at least one row in which all are true.
+Inconsistent: Describes statements for which there is no row in which all are true.
+Indirect truth table: A shortcut that tests validity by assuming the premises true and the conclusion false, then working backward to see if that is possible.

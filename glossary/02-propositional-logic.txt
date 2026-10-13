@@ -1,0 +1,21 @@
+title: Propositional Logic
+note: Statements built from simple statements and the five operators.
+Simple statement: A statement that does not contain another statement as a part, represented by a capital letter such as P.
+Compound statement: A statement that contains at least one simple statement as a part, joined or modified by operators.
+Operator: A symbol used to build compound statements: ~, •, ∨, ⊃ and ≡. Also called a connective.
+Negation (~): A statement of the form ~p, read "not p". It is true exactly when p is false.
+Conjunction (•): A statement of the form p • q, read "p and q". It is true only when both conjuncts are true.
+Conjunct: Either of the two statements joined by •.
+Disjunction (∨): A statement of the form p ∨ q, read "p or q". It is false only when both disjuncts are false (inclusive "or").
+Disjunct: Either of the two statements joined by ∨.
+Conditional (⊃): A statement of the form p ⊃ q, read "if p then q". It is false only when the antecedent is true and the consequent is false. Also called a material conditional.
+Antecedent: The part of a conditional before the ⊃ (the "if" part).
+Consequent: The part of a conditional after the ⊃ (the "then" part).
+Biconditional (≡): A statement of the form p ≡ q, read "p if and only if q". It is true when both sides have the same truth value.
+Main operator: The operator that governs the whole statement, the last one applied when the statement is built up. It determines what kind of statement it is.
+Well-formed formula: A string of symbols that is grammatically correct in the language of logic, such as (P ⊃ Q) • ~R. Also called a WFF.
+Statement variable: A lowercase letter such as p or q that stands for any statement, used when stating rules and forms.
+Necessary condition: In p ⊃ q, q is a necessary condition for p: p can't be true without q.
+Sufficient condition: In p ⊃ q, p is a sufficient condition for q: p being true guarantees q.
+Unless: "p unless q" is translated p ∨ q (or ~q ⊃ p).
+Only if: "p only if q" is translated p ⊃ q.
