@@ -32,6 +32,12 @@
   }));
   const ordered = [...byId.values()];
 
+  // Shown when generated.js is missing: the site was published without running build.js.
+  const NOT_BUILT = location.protocol === 'file:'
+    ? 'Nothing loaded yet. Run "node build.js" in this folder, then reload.'
+    : 'Nothing loaded: the site was published without its build step. ' +
+      'In the GitHub repository, open Settings → Pages and set Source to "GitHub Actions".';
+
   // ------------------------------------------------------------- state
 
   let current = null;   // { problem, set, label, rules }
@@ -87,7 +93,7 @@
       d.appendChild(grid);
       list.appendChild(d);
     });
-    $('progress-summary').textContent = total ? `${done} of ${total} problems solved` : 'No problems loaded. Run "node build.js" to collect the problems/ folder.';
+    $('progress-summary').textContent = total ? `${done} of ${total} problems solved` : NOT_BUILT;
   }
 
   // ------------------------------------------------------------- views
@@ -618,7 +624,7 @@
       topics.appendChild(chip);
     });
     $('glossary-empty').hidden = shown > 0;
-    $('glossary-empty').textContent = glossary.length ? 'No matching terms.' : 'No glossary terms loaded. Run "node build.js".';
+    $('glossary-empty').textContent = glossary.length ? 'No matching terms.' : NOT_BUILT;
   }
 
   $('glossary-search').addEventListener('input', renderGlossary);
