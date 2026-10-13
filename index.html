@@ -11,7 +11,7 @@
   <button id="menu-btn" class="icon-btn" aria-label="Show problem list">☰</button>
   <div class="brand">
     <h1>Laker Logic Gym</h1>
-    <p>Practice natural deduction proofs</p>
+    <p>Practice proofs and truth tables</p>
   </div>
   <button id="theme-btn" class="text-btn">Dark / light</button>
 </header>
@@ -20,7 +20,7 @@
   <nav id="sidebar" aria-label="Problems">
     <div id="progress-summary"></div>
     <div id="set-list"></div>
-    <button id="custom-btn" class="side-link">✎ Try your own argument</button>
+    <button id="custom-btn" class="side-link">✎ Try your own problem</button>
   </nav>
 
   <main id="main">
@@ -31,6 +31,7 @@
 
       <div class="argument" id="argument"></div>
 
+      <div id="proof-area">
       <div class="palette" aria-label="Insert symbol">
         <span class="palette-label">Insert:</span>
         <button data-sym="~" title="not (type ~)">~</button>
@@ -40,7 +41,8 @@
         <button data-sym="≡" title="if and only if (type =)">≡</button>
         <button data-sym="(">(</button>
         <button data-sym=")">)</button>
-        <span class="palette-help">or type <kbd>~</kbd> <kbd>&amp;</kbd> <kbd>v</kbd> <kbd>&gt;</kbd> <kbd>=</kbd></span>
+        <button data-sym="∃" class="pred-only" title="there exists (type (Ex))">∃</button>
+        <span class="palette-help">or type <kbd>~</kbd> <kbd>&amp;</kbd> <kbd>v</kbd> <kbd>&gt;</kbd> <kbd>=</kbd><span class="pred-only">, <kbd>(x)</kbd> for all, <kbd>(Ex)</kbd> for some</span></span>
       </div>
 
       <div class="proof" id="proof" role="table" aria-label="Proof"></div>
@@ -57,12 +59,27 @@
         <summary>Rules reference</summary>
         <div id="rules-body"></div>
       </details>
+      </div>
+
+      <div id="tt-area">
+        <p class="note">Click a cell (or type <kbd>T</kbd> / <kbd>F</kbd>) to fill it in. The letters' columns are done for you.</p>
+        <div class="tt-wrap"><table class="tt" id="tt"></table></div>
+        <fieldset class="tt-choices" id="tt-choices"></fieldset>
+        <div class="proof-actions">
+          <button id="tt-check" class="btn">Check my table</button>
+          <button id="tt-clear" class="btn ghost">Start over</button>
+        </div>
+        <div class="status" id="tt-status" aria-live="polite"></div>
+      </div>
     </section>
 
     <section id="custom-view" hidden>
-      <h2>Try your own argument</h2>
-      <p class="note">Type the premises separated by commas, then a slash, then the conclusion.
-        All rules are available.</p>
+      <h2>Try your own problem</h2>
+      <div class="mode-pick" role="radiogroup" aria-label="Kind of problem">
+        <label><input type="radio" name="mode" value="proof" checked /> Proof</label>
+        <label><input type="radio" name="mode" value="tt" /> Truth table</label>
+      </div>
+      <p class="note" id="custom-help"></p>
       <form id="custom-form" class="custom-form">
         <input id="custom-input" autocomplete="off" spellcheck="false" placeholder="P > Q, Q > R / P > R" />
         <button class="btn" type="submit">Start proof</button>
@@ -78,6 +95,7 @@
       <p>For a conditional proof, write <code>ACP</code> as the justification of the assumption.
         Close the subproof with a line justified like <code>3-5 CP</code>.
         Indirect proof works the same way with <code>AIP</code> and <code>IP</code>.</p>
+      <p>Truth-table problems ask you to fill in a table and then classify what you found.</p>
     </section>
   </main>
 </div>

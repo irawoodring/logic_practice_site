@@ -25,7 +25,8 @@ for (const set of sets) {
   for (const p of set.problems) {
     count++;
     if (p.error) { fail(`"${p.text}": ${p.error}`); continue; }
-    if (p.invalid) { fail(`"${p.text}" is invalid, so it can't be proved`); continue; }
+    if (p.invalid) { fail(`"${p.text}" is invalid, so it can't be proved (counterexample ${p.invalid})`); continue; }
+    if (p.type === 'truthtable') { solved++; continue; }
     if (seen.has(p.id)) fail(`"${p.text}" duplicates a problem in "${seen.get(p.id)}"`);
     seen.set(p.id, set.title);
     const sol = SOLUTIONS[p.key];
@@ -49,5 +50,5 @@ for (const [name, fn] of Object.entries(UNIT)) {
   try { fn(Logic); } catch (e) { fail(`${name}: ${e.message}`); }
 }
 
-console.log(`\n${count} problems, ${solved} verified with sample solutions, ${failures} problem(s) found.`);
+console.log(`\n${count} problems, ${solved} verified (truth tables, or proofs with sample solutions), ${failures} problem(s) found.`);
 process.exit(failures ? 1 : 0);

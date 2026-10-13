@@ -1,14 +1,22 @@
 # Laker Logic Gym
 
-A practice site where students build natural deduction proofs in propositional
-logic, similar to Logic Baron. Every line is checked as the student types, and
-errors come with a short explanation.
+A practice site for logic students, similar to Logic Baron:
 
-It uses the rules from Hurley's *A Concise Introduction to Logic*:
+- **Natural deduction proofs** in propositional and predicate logic. Every line
+  is checked as the student types, and errors come with a short explanation.
+- **Truth tables** for classifying statements (tautologous, self-contradictory,
+  contingent), comparing statements (equivalent, contradictory, consistent,
+  inconsistent) and testing arguments (valid, invalid).
+
+Proofs use the rules from Hurley's *A Concise Introduction to Logic*:
 
 - **8 rules of implication:** MP, MT, HS, DS, CD, Simp, Conj, Add
 - **10 rules of replacement:** DM, Com, Assoc, Dist, DN, Trans, Impl, Equiv, Exp, Taut
+- **Quantifier rules:** UI, UG, EI, EG (with Hurley's restrictions) and QN,
+  including relational predicates like `Lxy`
 - **Conditional and indirect proof:** ACP / CP, AIP / IP
+
+Identity (`a = b`) isn't supported yet.
 
 Progress and in-progress proofs are saved in each student's browser.
 
@@ -31,9 +39,31 @@ A > B, ~B / ~A
   no premises starts with the slash: `/ P > P`.
 - Symbols: `~` not, `&` or `.` and, `v` or, `>` if-then, `=` iff. The real
   symbols (`•`, `∨`, `⊃`, `≡`) also work. Use capital letters and parentheses.
+- Predicate logic: `(x)` means "for all x" and `(Ex)` or `(∃x)` means "there
+  is an x". Predicates are a capital letter followed by lowercase terms: `Fa`,
+  `Lxy`. Letters a–w (except v) name individuals; x, y, z are variables.
+  Example: `(x)(Hx > Mx), Hs / Ms`
+
+### Truth-table sets
+
+Add `type: truth table` under the set's title. Each line is then one of:
+
+```
+# 16. More Truth Tables
+type: truth table
+P > (Q > P)            one statement: tautologous, self-contradictory, contingent
+P > Q, ~Q > ~P         statements to compare: equivalent, contradictory, consistent...
+P > Q, Q / P           an argument: valid or invalid
+```
+
+Students fill in a column for every part of each statement. Add
+`columns: main` to the set to have them fill in only each statement's main
+column.
 
 Refresh the page to see the new problems. A typo or an argument that can't be
-proved shows up with a ⚠ in the problem list.
+proved shows up with a ⚠ in the problem list. For predicate logic the site
+searches small domains for a counterexample, so it catches most (but not
+every) invalid argument.
 
 ### Checking problems before you publish (optional)
 

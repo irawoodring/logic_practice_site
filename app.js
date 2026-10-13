@@ -42,8 +42,11 @@
 
   const SYMS = { '<->': '≡', '<=>': '≡', '<>': '≡', '=': '≡', '->': '⊃', '=>': '⊃', '>': '⊃',
     '&': '•', '*': '•', '^': '•', '.': '•', 'v': '∨', '!': '~' };
-  const symbolize = (s) => s.replace(/<->|<=>|<>|->|=>|>|=|&|\*|\^|\.|v|!|[a-uw-z]/g,
-    (m) => SYMS[m] || m.toUpperCase());
+  // Converts keyboard shortcuts to symbols and capitalizes a lone lowercase
+  // letter (a statement), leaving terms like the "a" in "Fa" and x, y, z alone.
+  const symbolize = (s) => s
+    .replace(/<->|<=>|<>|->|=>|>|=|&|\*|\^|\.|v|!/g, (m) => SYMS[m])
+    .replace(/(^|[^A-Za-z])([a-uw])(?![A-Za-z])/g, (m, before, c) => before + c.toUpperCase());
 
   const pretty = (f) => L.str(f);
 
@@ -106,13 +109,14 @@
     if ((m = /^\/p\/(.+)$/.exec(h)) && byId.has(m[1])) {
       const e = byId.get(m[1]);
       openProblem(e.problem, e.set, `${e.set.title} · Problem ${e.pi + 1}`, e.set.rules);
-    } else if ((m = /^\/custom\/(.+)$/.exec(h))) {
-      const p = L.parseArgument(m[1]);
-      if (p.error) { showCustom(m[1], p.error); return; }
+    } else if ((m = /^\/custom(tt)?\/(.+)$/.exec(h))) {
+      const tt = !!m[1];
+      const p = tt ? L.parseTruthTable(m[2]) : L.parseArgument(m[2]);
+      if (p.error) { showCustom(m[2], p.error, tt); return; }
       p.uid = 'custom-' + p.id;
-      openProblem(p, null, 'Your own argument', L.ALL_RULES);
+      openProblem(p, null, tt ? 'Your own truth table' : 'Your own argument', L.ALL_RULES);
     } else if (h === '/custom') {
-      showCustom('', '');
+      showCustom('', '', false);
     } else {
       current = null;
       renderSidebar();
@@ -120,9 +124,11 @@
     }
   }
 
-  function showCustom(text, error) {
+  function showCustom(text, error, tt) {
     current = null;
     renderSidebar();
+    document.querySelector(`input[name=mode][value=${tt ? 'tt' : 'proof'}]`).checked = true;
+    customHelp();
     $('custom-input').value = text;
     $('custom-error').textContent = error || '';
     show('custom-view');
@@ -141,24 +147,25 @@
     $('set-note').textContent = set ? set.description : '';
     $('set-note').hidden = !(set && set.description);
 
+    const tt = problem.type === 'truthtable';
+    $('proof-area').hidden = tt || !!problem.error;
+    $('tt-area').hidden = !tt || !!problem.error;
+    document.body.classList.toggle('predicate', !!problem.predicate);
+
     const warn = $('problem-warn');
     warn.hidden = true;
     if (problem.error) {
       warn.hidden = false;
       warn.textContent = `This problem has a typo in problems.js: "${problem.text}". ${problem.error}`;
       $('argument').textContent = problem.text;
-      $('proof').innerHTML = '';
-      $('status').textContent = '';
-      $('status').className = 'status';
-      renderRules();
       return;
     }
     if (problem.invalid) {
-      const row = Object.entries(problem.invalid).map(([k, v]) => `${k} = ${v ? 'T' : 'F'}`).join(', ');
       warn.hidden = false;
       warn.textContent = `Heads up: this argument is invalid, so it can't be proved. ` +
-        `The premises are all true and the conclusion is false when ${row}.`;
+        `The premises can all be true while the conclusion is false, ${problem.invalid}.`;
     }
+    if (tt) { openTruthTable(problem, set); return; }
 
     const arg = $('argument');
     arg.innerHTML = '';
@@ -327,17 +334,7 @@
     status.className = 'status' + (result.complete ? ' complete' : '');
     if (result.complete) {
       status.append('🎉 Proof complete! Nice work.');
-      if (!solved[current.problem.uid]) {
-        solved[current.problem.uid] = true;
-        store.set('solved', solved);
-        renderSidebar();
-      }
-      const next = nextProblem();
-      if (next) {
-        const b = el('button', 'btn', 'Next problem →');
-        b.addEventListener('click', () => go('#/p/' + next.uid));
-        status.appendChild(b);
-      }
+      markSolved();
     } else {
       status.textContent = result.message;
     }
@@ -362,6 +359,10 @@
       ['Rules of replacement (any part of a line, either direction)', L.REPLACEMENT_RULES.map((r) => [r, L.REPLACEMENT[r].name, L.REPLACEMENT[r].forms.join('\n')])],
       ['Subproofs', ['CP', 'IP'].map((r) => [r, L.PROOF_RULES[r].name, L.PROOF_RULES[r].form])],
     ];
+    if (current.problem.predicate) {
+      groups.splice(2, 0, ['Quantifier rules (UI, UG, EI, EG on whole lines; QN anywhere)', L.QUANTIFIER_RULES.map((r) =>
+        [r, L.QUANTIFIER[r].name, L.QUANTIFIER[r].form || L.QUANTIFIER[r].forms.join('\n')])]);
+    }
     for (const [title, rows] of groups) {
       body.appendChild(el('h3', '', title));
       const table = el('table', 'rule-table');
@@ -378,6 +379,189 @@
       body.appendChild(el('p', 'rules-legend', "Faded rules aren't available in this set."));
     }
   }
+
+  // ------------------------------------------------------------- truth tables
+
+  let tt = null; // { problem, columns: [{ formula, statement, main, start }], answers, choice }
+
+  function openTruthTable(problem, set) {
+    const mode = set ? set.columns : 'all';
+    const names = problem.kind === 'argument'
+      ? problem.statements.map((_, i) => (i === problem.statements.length - 1 ? 'Conclusion' : `Premise ${i + 1}`))
+      : problem.statements.map((_, i) => (problem.statements.length > 1 ? `Statement ${i + 1}` : 'Statement'));
+    const columns = [];
+    problem.statements.forEach((f, si) => {
+      L.tableColumns(f, mode).forEach((c, k) => {
+        columns.push({ formula: c, statement: si, main: L.eq(c, f), start: k === 0 });
+      });
+    });
+    const saved = store.get('tt:' + problem.uid, null) || {};
+    tt = { problem, columns, names, answers: saved.answers || {}, choice: saved.choice || '' };
+
+    const arg = $('argument');
+    arg.innerHTML = '';
+    if (problem.kind === 'argument') {
+      const last = problem.statements.length - 1;
+      arg.append(problem.statements.slice(0, last).map(pretty).join(',  ') + '   ');
+      const t = el('span', 'therefore', '∴ ');
+      arg.append(t, pretty(problem.statements[last]));
+    } else {
+      arg.append(problem.statements.map(pretty).join(',    '));
+    }
+    renderTruthTable();
+  }
+
+  function renderTruthTable() {
+    const { problem, columns, names } = tt;
+    const table = $('tt');
+    table.innerHTML = '';
+    const thead = el('thead');
+    const top = el('tr');
+    const letters = el('th', '', '');
+    letters.colSpan = problem.letters.length;
+    top.appendChild(letters);
+    names.forEach((name, si) => {
+      const th = el('th', 'start', name);
+      th.colSpan = columns.filter((c) => c.statement === si).length;
+      top.appendChild(th);
+    });
+    const head = el('tr');
+    problem.letters.forEach((l) => head.appendChild(el('th', '', l)));
+    columns.forEach((c) => head.appendChild(el('th', (c.start ? 'start ' : '') + (c.main ? 'main' : ''), pretty(c.formula))));
+    thead.append(top, head);
+
+    const tbody = el('tbody');
+    problem.rows.forEach((row, r) => {
+      const tr = el('tr');
+      problem.letters.forEach((l) => tr.appendChild(el('td', 'given', row[l] ? 'T' : 'F')));
+      columns.forEach((c, ci) => {
+        const td = el('td', (c.start ? 'start ' : '') + (c.main ? 'main' : ''));
+        const b = el('button', 'cell', tt.answers[`${ci}-${r}`] || '');
+        b.dataset.c = ci;
+        b.dataset.r = r;
+        b.setAttribute('aria-label', `${pretty(c.formula)}, row ${r + 1}`);
+        b.addEventListener('click', () => {
+          const order = ['', 'T', 'F'];
+          setCell(b, order[(order.indexOf(b.textContent) + 1) % 3]);
+        });
+        b.addEventListener('keydown', (e) => cellKey(e, ci, r, b));
+        td.appendChild(b);
+        tr.appendChild(td);
+      });
+      tbody.appendChild(tr);
+    });
+    table.append(thead, tbody);
+
+    const fs = $('tt-choices');
+    fs.innerHTML = '';
+    fs.appendChild(el('legend', '', problem.kind === 'argument' ? 'The argument is'
+      : problem.kind === 'statement' ? 'The statement is' : 'The statements are'));
+    problem.choices.forEach((choice) => {
+      const label = el('label');
+      const input = el('input');
+      input.type = 'radio';
+      input.name = 'tt-choice';
+      input.value = choice;
+      input.checked = tt.choice === choice;
+      input.addEventListener('change', () => { tt.choice = choice; saveTT(); clearMarks(); });
+      label.append(input, choice);
+      fs.appendChild(label);
+    });
+    clearMarks();
+  }
+
+  function setCell(b, value) {
+    b.textContent = value;
+    b.classList.remove('right', 'wrong', 'missing');
+    const key = `${b.dataset.c}-${b.dataset.r}`;
+    if (value) tt.answers[key] = value;
+    else delete tt.answers[key];
+    saveTT();
+  }
+
+  function cellKey(e, c, r, b) {
+    const k = e.key.toLowerCase();
+    const move = (dc, dr) => {
+      const next = document.querySelector(`#tt .cell[data-c="${c + dc}"][data-r="${r + dr}"]`);
+      if (next) next.focus();
+    };
+    if (k === 't' || k === 'f') { setCell(b, k.toUpperCase()); move(0, 1); e.preventDefault(); }
+    else if (k === 'backspace' || k === 'delete') { setCell(b, ''); e.preventDefault(); }
+    else if (k === 'arrowdown') { move(0, 1); e.preventDefault(); }
+    else if (k === 'arrowup') { move(0, -1); e.preventDefault(); }
+    else if (k === 'arrowright') { move(1, 0); e.preventDefault(); }
+    else if (k === 'arrowleft') { move(-1, 0); e.preventDefault(); }
+  }
+
+  function saveTT() { store.set('tt:' + tt.problem.uid, { answers: tt.answers, choice: tt.choice }); }
+
+  function clearMarks() {
+    document.querySelectorAll('#tt-choices label').forEach((l) => l.classList.remove('right', 'wrong'));
+    const status = $('tt-status');
+    status.className = 'status';
+    status.textContent = solved[tt.problem.uid]
+      ? 'You solved this one already. Check again any time.'
+      : 'Fill in every cell, choose an answer, then check your table.';
+  }
+
+  function checkTruthTable() {
+    let wrong = 0, missing = 0;
+    document.querySelectorAll('#tt .cell').forEach((b) => {
+      const col = tt.columns[+b.dataset.c];
+      const want = L.evaluate(col.formula, tt.problem.rows[+b.dataset.r]) ? 'T' : 'F';
+      b.classList.remove('right', 'wrong', 'missing');
+      if (!b.textContent) { missing++; b.classList.add('missing'); }
+      else if (b.textContent === want) b.classList.add('right');
+      else { wrong++; b.classList.add('wrong'); }
+    });
+    const choiceOk = tt.choice === tt.problem.answer;
+    document.querySelectorAll('#tt-choices label').forEach((l) => {
+      const v = l.querySelector('input').value;
+      if (v === tt.choice) l.classList.add(choiceOk ? 'right' : 'wrong');
+    });
+
+    const status = $('tt-status');
+    status.innerHTML = '';
+    if (!wrong && !missing && choiceOk) {
+      status.className = 'status complete';
+      status.append('🎉 Truth table complete! Nice work.');
+      markSolved();
+      return;
+    }
+    status.className = 'status';
+    const parts = [];
+    if (wrong) parts.push(`${wrong} cell${wrong > 1 ? 's are' : ' is'} wrong`);
+    if (missing) parts.push(`${missing} cell${missing > 1 ? 's are' : ' is'} empty`);
+    if (!tt.choice) parts.push('you still need to choose an answer');
+    else if (!choiceOk) parts.push(`"${tt.choice}" isn't right`);
+    const msg = parts.join(', ');
+    status.textContent = msg[0].toUpperCase() + msg.slice(1) + '.';
+  }
+
+  // Records a solved problem and offers the next one in the status box.
+  function markSolved() {
+    const status = current.problem.type === 'truthtable' ? $('tt-status') : $('status');
+    if (!solved[current.problem.uid]) {
+      solved[current.problem.uid] = true;
+      store.set('solved', solved);
+      renderSidebar();
+    }
+    const next = nextProblem();
+    if (next) {
+      const b = el('button', 'btn', 'Next problem →');
+      b.addEventListener('click', () => go('#/p/' + next.uid));
+      status.appendChild(b);
+    }
+  }
+
+  $('tt-check').addEventListener('click', checkTruthTable);
+  $('tt-clear').addEventListener('click', () => {
+    if (!confirm('Erase your table?')) return;
+    tt.answers = {};
+    tt.choice = '';
+    saveTT();
+    renderTruthTable();
+  });
 
   // ------------------------------------------------------------- toolbar
 
@@ -426,12 +610,20 @@
   });
 
   $('custom-btn').addEventListener('click', () => go('#/custom'));
+  const customTT = () => document.querySelector('input[name=mode]:checked').value === 'tt';
+  function customHelp() {
+    $('custom-help').textContent = customTT()
+      ? 'Type one statement, several statements separated by commas, or an argument (premises / conclusion).'
+      : 'Type the premises separated by commas, then a slash, then the conclusion. All rules are available.';
+    $('custom-input').placeholder = customTT() ? 'P > Q, ~Q > ~P' : 'P > Q, Q > R / P > R';
+  }
+  document.querySelectorAll('input[name=mode]').forEach((r) => r.addEventListener('change', customHelp));
   $('custom-form').addEventListener('submit', (e) => {
     e.preventDefault();
     const text = symbolize($('custom-input').value);
-    const p = L.parseArgument(text);
+    const p = customTT() ? L.parseTruthTable(text) : L.parseArgument(text);
     if (p.error) { $('custom-error').textContent = p.error; return; }
-    go('#/custom/' + encodeURIComponent(text));
+    go((customTT() ? '#/customtt/' : '#/custom/') + encodeURIComponent(text));
   });
 
   $('menu-btn').addEventListener('click', () => document.body.classList.toggle('menu-open'));

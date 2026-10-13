@@ -55,4 +55,35 @@ module.exports = {
     assert(L.parseArgument('P > Q, Q / P').invalid, 'invalid argument not flagged');
     assert(!L.parseArgument('P > Q, P / Q').invalid, 'valid argument flagged');
   },
+  'UG cannot generalize from a constant'(L) {
+    assert(/name/.test(firstError(run(L, '(x)Fx / (x)Fx', [['Fa', '1 UI'], ['(x)Fx', '2 UG']]))), 'UG on a constant accepted');
+  },
+  'EI needs a new name'(L) {
+    const r = run(L, '(Ex)Fx, (Ex)Gx / (Ex)(Fx . Gx)', [['Fa', '1 EI'], ['Ga', '2 EI'], ['Fa . Ga', '3, 4 Conj'], ['(Ex)(Fx . Gx)', '5 EG']]);
+    assert(/new/.test(firstError(r)), 'reused EI name accepted');
+  },
+  'UG blocked on a variable free in an EI line'(L) {
+    const r = run(L, '(x)(Ey)Lxy / (Ey)(x)Lxy', [['(Ey)Lxy', '1 UI'], ['Lxa', '2 EI'], ['(x)Lxa', '3 UG'], ['(Ey)(x)Lxy', '4 EG']]);
+    assert(/EI/.test(firstError(r)), 'quantifier-shift fallacy accepted');
+  },
+  'UG blocked inside a subproof on its assumption variable'(L) {
+    const r = run(L, '(x)(Fx > Gx) / (x)(Fx > (x)Gx)', [['Fx', 'ACP'], ['(x)Fx', '2 UG']]);
+    assert(/assumption/.test(firstError(r)), 'UG on assumption variable accepted');
+  },
+  'UI must replace every occurrence the same way'(L) {
+    assert(firstError(run(L, '(x)Lxx / Lab', [['Lab', '1 UI']])), 'inconsistent UI accepted');
+  },
+  'UI cannot capture a variable'(L) {
+    assert(firstError(run(L, '(x)(Ey)Lxy / (Ey)Lyy', [['(Ey)Lyy', '1 UI']])), 'captured UI accepted');
+  },
+  'QN works inside a line'(L) {
+    const r = run(L, 'Pa > ~(x)Fx / Pa > (Ex)~Fx', [['Pa > (Ex)~Fx', '1 QN']]);
+    assert(r.complete, firstError(r) || r.message);
+  },
+  'truth tables classify correctly'(L) {
+    assert(L.parseTruthTable('P v ~P').answer === 'Tautologous', 'tautology');
+    assert(L.parseTruthTable('P > Q, ~P v Q').answer === 'Logically equivalent', 'equivalent');
+    assert(L.parseTruthTable('P . Q, ~P').answer === 'Inconsistent', 'inconsistent');
+    assert(L.parseTruthTable('P > Q, Q / P').answer === 'Invalid', 'invalid argument');
+  },
 };

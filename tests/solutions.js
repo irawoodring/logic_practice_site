@@ -78,4 +78,40 @@ module.exports = {
   ' / (P ⊃ Q) ⊃ (~Q ⊃ ~P)': [['P > Q', 'ACP'], ['~Q > ~P', '1 Trans'], ['(P > Q) > (~Q > ~P)', '1-2 CP']],
   ' / ~(P • ~P)': [['P . ~P', 'AIP'], ['~(P . ~P)', '1-1 IP']],
   ' / P ∨ ~P': [['~(P v ~P)', 'AIP'], ['~P . ~~P', '1 DM'], ['P v ~P', '1-2 IP']],
+
+  // 12. Quantifiers
+  '(x)(Ax ⊃ Bx), Aa / Ba': [['Aa > Ba', '1 UI'], ['Ba', '3, 2 MP']],
+  '(x)(Ax ⊃ Bx), (x)(Bx ⊃ Cx) / (x)(Ax ⊃ Cx)': [['Ax > Bx', '1 UI'], ['Bx > Cx', '2 UI'], ['Ax > Cx', '3, 4 HS'], ['(x)(Ax > Cx)', '5 UG']],
+  '(x)(Fx ⊃ Gx), (∃x)Fx / (∃x)Gx': [['Fa', '2 EI'], ['Fa > Ga', '1 UI'], ['Ga', '4, 3 MP'], ['(Ex)Gx', '5 EG']],
+  '(x)(Hx ⊃ Ix), (∃x)(Hx • Jx) / (∃x)(Ix • Jx)': [
+    ['Ha . Ja', '2 EI'], ['Ha > Ia', '1 UI'], ['Ha', '3 Simp'], ['Ia', '4, 5 MP'], ['Ja . Ha', '3 Com'], ['Ja', '7 Simp'],
+    ['Ia . Ja', '6, 8 Conj'], ['(Ex)(Ix . Jx)', '9 EG'],
+  ],
+  '(x)(Px ⊃ ~Qx), (x)(Rx ⊃ Qx) / (x)(Rx ⊃ ~Px)': [
+    ['Px > ~Qx', '1 UI'], ['Rx > Qx', '2 UI'], ['~~Qx > ~Px', '3 Trans'], ['Qx > ~Px', '5 DN'], ['Rx > ~Px', '4, 6 HS'], ['(x)(Rx > ~Px)', '7 UG'],
+  ],
+  '(x)Fx / (∃x)Fx': [['Fa', '1 UI'], ['(Ex)Fx', '2 EG']],
+
+  // 13. QN
+  '~(∃x)Fx / (x)~Fx': [['(x)~Fx', '1 QN']],
+  '~(x)(Fx ⊃ Gx) / (∃x)(Fx • ~Gx)': [
+    ['(Ex)~(Fx > Gx)', '1 QN'], ['~(Fa > Ga)', '2 EI'], ['~(~Fa v Ga)', '3 Impl'], ['~~Fa . ~Ga', '4 DM'], ['Fa . ~Ga', '5 DN'], ['(Ex)(Fx . ~Gx)', '6 EG'],
+  ],
+  '(x)(Ax ⊃ Bx), ~(x)Bx / ~(x)Ax': [
+    ['(Ex)~Bx', '2 QN'], ['~Ba', '3 EI'], ['Aa > Ba', '1 UI'], ['~Aa', '5, 4 MT'], ['(Ex)~Ax', '6 EG'], ['~(x)Ax', '7 QN'],
+  ],
+  '(∃x)Fx ⊃ (x)Gx, ~Gm / (x)~Fx': [['(Ex)~Gx', '2 EG'], ['~(x)Gx', '3 QN'], ['~(Ex)Fx', '1, 4 MT'], ['(x)~Fx', '5 QN']],
+
+  // 14. Quantifiers with CP and IP
+  '(x)(Ax ⊃ Bx) / (x)Ax ⊃ (x)Bx': [['(x)Ax', 'ACP'], ['Ax', '2 UI'], ['Ax > Bx', '1 UI'], ['Bx', '4, 3 MP'], ['(x)Bx', '5 UG'], ['(x)Ax > (x)Bx', '2-6 CP']],
+  '(x)(Fx ⊃ Gx) / (∃x)Fx ⊃ (∃x)Gx': [['(Ex)Fx', 'ACP'], ['Fa', '2 EI'], ['Fa > Ga', '1 UI'], ['Ga', '4, 3 MP'], ['(Ex)Gx', '5 EG'], ['(Ex)Fx > (Ex)Gx', '2-6 CP']],
+  '(x)(Fx ⊃ Gx), (x)(Fx ⊃ ~Gx) / (x)~Fx': [
+    ['Fx', 'AIP'], ['Fx > Gx', '1 UI'], ['Fx > ~Gx', '2 UI'], ['Gx', '4, 3 MP'], ['~Gx', '5, 3 MP'], ['Gx . ~Gx', '6, 7 Conj'], ['~Fx', '3-8 IP'], ['(x)~Fx', '9 UG'],
+  ],
+
+  // 15. Relational
+  '(x)(y)Lxy / Lab': [['(y)Lay', '1 UI'], ['Lab', '2 UI']],
+  '(∃x)(y)Lxy / (y)(∃x)Lxy': [['(y)Lay', '1 EI'], ['Lay', '2 UI'], ['(Ex)Lxy', '3 EG'], ['(y)(Ex)Lxy', '4 UG']],
+  '(x)(Fx ⊃ (y)Gxy), Fa / Gab': [['Fa > (y)Gay', '1 UI'], ['(y)Gay', '3, 2 MP'], ['Gab', '4 UI']],
+  '(x)(y)(Lxy ⊃ Lyx), Lab / Lba': [['(y)(Lay > Lya)', '1 UI'], ['Lab > Lba', '3 UI'], ['Lba', '4, 2 MP']],
 };
