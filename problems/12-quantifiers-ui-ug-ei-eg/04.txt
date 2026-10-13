@@ -1,0 +1,1 @@
+(x)(Hx > Ix), (Ex)(Hx . Jx) / (Ex)(Ix . Jx)

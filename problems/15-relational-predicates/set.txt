@@ -1,0 +1,3 @@
+title: Relational Predicates
+rules: all
+note: Predicates can relate several things: Lab means "a loves b".

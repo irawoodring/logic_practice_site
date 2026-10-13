@@ -1,0 +1,3 @@
+title: Replacement Rules I
+rules: implication, DM, Com, Assoc, Dist, DN
+note: Replacement rules can be applied to part of a line, and in either direction.

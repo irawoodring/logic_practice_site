@@ -1,0 +1,3 @@
+title: Quantifiers: UI, UG, EI, EG
+rules: all
+note: Type (x) for "for all x" and (Ex) or the ∃ button for "there exists an x". Lowercase a-w name individuals; x, y, z are variables.

@@ -1,0 +1,3 @@
+title: Indirect Proof
+rules: all
+note: Assume the opposite (AIP), reach a contradiction q • ~q, then close with "first-last IP".

@@ -68,7 +68,7 @@
       done += count;
       const s = document.createElement('summary');
       s.innerHTML = `<span></span><span class="set-count${count === set.problems.length && count ? ' done' : ''}">${count}/${set.problems.length}</span>`;
-      s.firstChild.textContent = set.title + (set.ruleErrors.length ? ' ⚠' : '');
+      s.firstChild.textContent = `${si + 1}. ${set.title}` + (set.ruleErrors.length ? ' ⚠' : '');
       d.appendChild(s);
 
       const grid = document.createElement('div');
@@ -87,7 +87,7 @@
       d.appendChild(grid);
       list.appendChild(d);
     });
-    $('progress-summary').textContent = total ? `${done} of ${total} problems solved` : 'No problems found in problems.js';
+    $('progress-summary').textContent = total ? `${done} of ${total} problems solved` : 'No problems loaded. Run "node build.js" to collect the problems/ folder.';
   }
 
   // ------------------------------------------------------------- views
@@ -108,7 +108,7 @@
     let m;
     if ((m = /^\/p\/(.+)$/.exec(h)) && byId.has(m[1])) {
       const e = byId.get(m[1]);
-      openProblem(e.problem, e.set, `${e.set.title} · Problem ${e.pi + 1}`, e.set.rules);
+      openProblem(e.problem, e.set, `${e.si + 1}. ${e.set.title} · Problem ${e.pi + 1}`, e.set.rules);
     } else if ((m = /^\/custom(tt)?\/(.+)$/.exec(h))) {
       const tt = !!m[1];
       const p = tt ? L.parseTruthTable(m[2]) : L.parseArgument(m[2]);
@@ -156,7 +156,7 @@
     warn.hidden = true;
     if (problem.error) {
       warn.hidden = false;
-      warn.textContent = `This problem has a typo in problems.js: "${problem.text}". ${problem.error}`;
+      warn.textContent = `This problem has a typo in the problems/ folder: "${problem.text}". ${problem.error}`;
       $('argument').textContent = problem.text;
       return;
     }

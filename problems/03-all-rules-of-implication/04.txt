@@ -1,0 +1,1 @@
+(A > B) . (C > D), A v C / B v D

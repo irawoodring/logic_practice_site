@@ -1,0 +1,2 @@
+title: Quantifiers with CP and IP
+rules: all

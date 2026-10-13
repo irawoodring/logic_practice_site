@@ -1,0 +1,3 @@
+title: Theorems
+rules: all
+note: No premises! Start with an assumption.

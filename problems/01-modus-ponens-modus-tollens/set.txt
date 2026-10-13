@@ -1,0 +1,3 @@
+title: Modus Ponens & Modus Tollens
+rules: MP, MT
+note: Use MP (p ⊃ q, p ∴ q) and MT (p ⊃ q, ~q ∴ ~p).

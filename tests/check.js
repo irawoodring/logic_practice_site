@@ -1,18 +1,17 @@
 #!/usr/bin/env node
-// Checks problems.js for typos and unprovable (invalid) arguments, and runs
+// Checks the problems/ folder for typos and unprovable (invalid) arguments, and runs
 // the sample solutions in tests/solutions.js through the proof checker.
 //
 //   node tests/check.js
 'use strict';
-const fs = require('fs');
-const path = require('path');
 const Logic = require('../logic.js');
+const { collect } = require('../build.js');
 const SOLUTIONS = require('./solutions.js');
 const UNIT = require('./unit.js');
 
-const window = {};
-new Function('window', fs.readFileSync(path.join(__dirname, '..', 'problems.js'), 'utf8'))(window);
-const sets = Logic.parseProblemFile(window.PROBLEMS);
+const where = new Map();
+const sets = Logic.parseProblemFile(collect(undefined, where));
+const at = (p) => (where.has(p.text) ? ` (${where.get(p.text)})` : '');
 
 let failures = 0;
 const fail = (msg) => { failures++; console.log('  ✗ ' + msg); };
@@ -24,10 +23,10 @@ for (const set of sets) {
   if (set.ruleErrors.length) fail(`unknown rule name(s): ${set.ruleErrors.join(', ')}`);
   for (const p of set.problems) {
     count++;
-    if (p.error) { fail(`"${p.text}": ${p.error}`); continue; }
-    if (p.invalid) { fail(`"${p.text}" is invalid, so it can't be proved (counterexample ${p.invalid})`); continue; }
+    if (p.error) { fail(`"${p.text}"${at(p)}: ${p.error}`); continue; }
+    if (p.invalid) { fail(`"${p.text}"${at(p)} is invalid, so it can't be proved (counterexample ${p.invalid})`); continue; }
     if (p.type === 'truthtable') { solved++; continue; }
-    if (seen.has(p.id)) fail(`"${p.text}" duplicates a problem in "${seen.get(p.id)}"`);
+    if (seen.has(p.id)) fail(`"${p.text}"${at(p)} duplicates a problem in "${seen.get(p.id)}"`);
     seen.set(p.id, set.title);
     const sol = SOLUTIONS[p.key];
     if (!sol) continue;

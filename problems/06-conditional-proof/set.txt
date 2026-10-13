@@ -1,0 +1,3 @@
+title: Conditional Proof
+rules: all
+note: Start a subproof with an assumption (ACP), then close it with "first-last CP".

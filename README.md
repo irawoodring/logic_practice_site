@@ -18,80 +18,66 @@ Proofs use the rules from Hurley's *A Concise Introduction to Logic*:
 
 Identity (`a = b`) isn't supported yet.
 
-Progress and in-progress proofs are saved in each student's browser.
 
 ## Adding problems
 
-All problems live in **`problems.js`**. Add one line per problem:
+Every problem is a text file in the **`problems/`** folder, one folder per set:
 
 ```
-# 9. My New Set
-rules: implication, DM, Com
-note: Optional instructions shown to students.
-A > B, ~B / ~A
-(P v Q) . R, ~P / Q
+problems/
+  01-modus-ponens-modus-tollens/
+    set.txt      title: Modus Ponens & Modus Tollens
+                 rules: MP, MT
+    01.txt       P > Q, P / Q
+    02.txt       P > Q, ~Q / ~P
 ```
 
-- `# Title` starts a new set.
-- `rules:` limits which rules students may use. Leave it out to allow every rule.
-  `implication`, `replacement` and `all` are shortcuts for groups of rules.
-- Each problem is `premises separated by commas / conclusion`. A theorem with
-  no premises starts with the slash: `/ P > P`.
-- Symbols: `~` not, `&` or `.` and, `v` or, `>` if-then, `=` iff. The real
-  symbols (`•`, `∨`, `⊃`, `≡`) also work. Use capital letters and parentheses.
-- Predicate logic: `(x)` means "for all x" and `(Ex)` or `(∃x)` means "there
-  is an x". Predicates are a capital letter followed by lowercase terms: `Fa`,
-  `Lxy`. Letters a–w (except v) name individuals; x, y, z are variables.
-  Example: `(x)(Hx > Mx), Hs / Ms`
+To add a problem, create a new file in a set's folder (on GitHub: **Add file →
+Create new file**) containing the problem, and commit it. To add a set, create a
+new folder with a `set.txt`. The site rebuilds itself within a minute or two.
 
-### Truth-table sets
+[`problems/README.md`](problems/README.md) has the full format: rules, symbols,
+predicate logic and truth-table sets.
 
-Add `type: truth table` under the set's title. Each line is then one of:
+Typos and arguments that can't be proved show a ⚠ on the site. GitHub also
+checks every commit: a red ✗ on the **Actions** tab (and an email) names the
+file with the mistake.
 
-```
-# 16. More Truth Tables
-type: truth table
-P > (Q > P)            one statement: tautologous, self-contradictory, contingent
-P > Q, ~Q > ~P         statements to compare: equivalent, contradictory, consistent...
-P > Q, Q / P           an argument: valid or invalid
-```
+## Publishing with GitHub Pages
 
-Students fill in a column for every part of each statement. Add
-`columns: main` to the set to have them fill in only each statement's main
-column.
+The page can't list a folder by itself, so a GitHub Action
+([`.github/workflows/deploy.yml`](.github/workflows/deploy.yml)) collects
+`problems/` into one file on every push to `main` and publishes the site.
 
-Refresh the page to see the new problems. A typo or an argument that can't be
-proved shows up with a ⚠ in the problem list. For predicate logic the site
-searches small domains for a counterexample, so it catches most (but not
-every) invalid argument.
+One-time setup: in the repository, go to **Settings → Pages** and set
+**Source** to **GitHub Actions**. The site will be at
+`https://<your-username>.github.io/<repository-name>/`.
 
-### Checking problems before you publish (optional)
+## Previewing on your own computer (optional)
 
 With [Node.js](https://nodejs.org) installed:
 
 ```
-node tests/check.js
+node build.js          # collects problems/ into problems.generated.js
+node tests/check.js    # reports typos, duplicates and invalid arguments
 ```
 
-This reports typos, duplicate problems, and invalid arguments. It also runs the
-sample proofs in `tests/solutions.js` (adding solutions there is optional).
+Then open `index.html` in a browser. Run `node build.js` again after changing
+problems. `tests/solutions.js` holds sample proofs that the check script runs
+(adding solutions there is optional).
 
-## Running the site
-
-The site is plain HTML, CSS and JavaScript with no build step. Open
-`index.html` in a browser, or host the folder anywhere that serves static
-files. With GitHub Pages, go to *Settings → Pages* and deploy from the `main`
-branch.
-
-Students can also type in their own arguments with **Try your own argument**.
-The address of that page links straight to the argument, so you can share it.
+Students can also type in their own problems with **Try your own problem**.
+The address of that page links straight to the problem, so you can share it.
+Progress is saved in each student's browser.
 
 ## Files
 
 | File | Purpose |
 | --- | --- |
-| `problems.js` | The problem sets: edit this one |
-| `logic.js` | Parser and proof checker |
+| `problems/` | The problems: add files here |
+| `build.js` | Collects `problems/` into `problems.generated.js` |
+| `logic.js` | Parser, proof checker and truth tables |
 | `app.js` | Page behavior |
 | `index.html`, `style.css` | Layout and styling |
+| `.github/workflows/deploy.yml` | Builds and publishes the site |
 | `tests/` | Problem checker, sample solutions, checker tests |

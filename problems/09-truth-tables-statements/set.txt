@@ -1,0 +1,3 @@
+title: Truth Tables: Statements
+type: truth table
+note: Fill in every column, then classify the statement.

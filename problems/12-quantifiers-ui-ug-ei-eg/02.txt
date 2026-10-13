@@ -1,0 +1,1 @@
+(x)(Ax > Bx), (x)(Bx > Cx) / (x)(Ax > Cx)
