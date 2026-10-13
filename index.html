@@ -33,6 +33,21 @@
       <div class="argument" id="argument"></div>
 
       <div id="proof-area">
+      <details class="howto" id="howto">
+        <summary>How to enter a proof</summary>
+        <p>The premises are already filled in. Add one line at a time until you reach the conclusion.
+          On each new line, type a <strong>statement</strong>, then a <strong>justification</strong>:
+          the line number(s) it comes from and the rule's abbreviation.</p>
+        <p>Example: to prove <span class="math">P • Q ∴ P</span>, line 1 is the premise
+          <span class="math">P • Q</span>. On line 2 type <code>P</code> as the statement and
+          <code>1 Simp</code> as the justification. The line gets a ✓, and the proof is complete.</p>
+        <ul>
+          <li>Justifications look like <code>1, 2 MP</code>, <code>3 DM</code>, <code>ACP</code> or <code>4-6 CP</code>.
+            Rule abbreviations are in the <em>Rules reference</em> below.</li>
+          <li>Press <kbd>Enter</kbd> to move from the statement to the justification, and again to add a new line.</li>
+          <li>A ✗ means the line doesn't follow yet; the message under it says why.</li>
+        </ul>
+      </details>
       <div class="palette" aria-label="Insert symbol">
         <span class="palette-label">Insert:</span>
         <button data-sym="~" title="not (type ~)">~</button>

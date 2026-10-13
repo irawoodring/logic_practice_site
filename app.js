@@ -188,6 +188,8 @@
     arg.append(t, pretty(problem.conclusion));
 
     steps = store.get('proof:' + problem.uid, null) || [{ text: '', just: '' }];
+    // Keep the instructions open until the student has finished a proof.
+    $('howto').open = !Object.keys(solved).length;
     renderRules();
     renderProof();
   }
@@ -229,6 +231,7 @@
       si.value = step.text;
       si.setAttribute('aria-label', `Line ${premises.length + i + 1} statement`);
       si.spellcheck = false;
+      si.placeholder = i === 0 ? 'Type a statement, e.g. P' : 'Statement';
       si.autocomplete = 'off';
       si.dataset.col = 'text';
       stmt.append(bars, si);
@@ -236,7 +239,7 @@
       const just = el('div', 'just');
       const ji = el('input');
       ji.value = step.just;
-      ji.placeholder = 'e.g. 1, 2 MP';
+      ji.placeholder = i === 0 ? 'e.g. 1 Simp' : 'e.g. 1, 2 MP';
       ji.setAttribute('aria-label', `Line ${premises.length + i + 1} justification`);
       ji.spellcheck = false;
       ji.autocomplete = 'off';
