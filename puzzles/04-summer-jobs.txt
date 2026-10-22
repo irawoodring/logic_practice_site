@@ -1,0 +1,18 @@
+title: Summer Jobs
+difficulty: Medium
+story: Four teenagers each started a different summer job on a different day this week, and each earns a different hourly wage. Match each teen with their job, start day and pay.
+Teens: Lena, Marco, Nia, Omar
+Jobs: lifeguard, cashier, tutor, dog walker
+Start days: Monday, Tuesday, Wednesday, Thursday
+Pay: $10, $12, $14, $16
+clue: The tutor earns the most.
+clue: Marco started the day before Omar.
+clue: The dog walker started last and earns the least.
+clue: Neither Nia nor Marco is the tutor.
+clue: Omar earns less than Marco.
+clue: The cashier earns $2 less than the lifeguard.
+clue: Lena started on Wednesday.
+answer: Lena, tutor, Wednesday, $16
+answer: Marco, lifeguard, Monday, $14
+answer: Nia, dog walker, Thursday, $10
+answer: Omar, cashier, Tuesday, $12

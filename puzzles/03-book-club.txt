@@ -1,0 +1,19 @@
+title: Book Club
+difficulty: Medium
+story: Four members of a book club each started a different kind of book this week, read a different number of pages, and brought a different snack to the meeting. Match each member with their book, pages and snack.
+Members: Hana, Ivan, June, Kofi
+Books: mystery, biography, sci-fi, poetry
+Pages: 50, 75, 100, 125
+Snacks: apples, cookies, grapes, popcorn
+clue: The poetry reader read 25 fewer pages than the biography reader.
+clue: June read more pages than Hana.
+clue: Whoever brought grapes is reading the mystery.
+clue: Kofi brought popcorn.
+clue: Ivan read the fewest pages.
+clue: The sci-fi reader didn't bring cookies.
+clue: The mystery reader read 50 more pages than Ivan.
+clue: Kofi isn't reading sci-fi.
+answer: Hana, mystery, 100, grapes
+answer: Ivan, poetry, 50, cookies
+answer: June, sci-fi, 125, apples
+answer: Kofi, biography, 75, popcorn

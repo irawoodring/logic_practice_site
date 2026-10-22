@@ -86,4 +86,20 @@ module.exports = {
     assert(L.parseTruthTable('P . Q, ~P').answer === 'Inconsistent', 'inconsistent');
     assert(L.parseTruthTable('P > Q, Q / P').answer === 'Invalid', 'invalid argument');
   },
+  'puzzle format mistakes are reported'(L) {
+    const P = require('../puzzle.js');
+    const base = 'Names: Amy, Ben\nPets: cat, dog\nclue: Amy has the cat.\n';
+    assert(!P.parsePuzzle(base + 'answer: Amy, cat\nanswer: dog, Ben\n', 'a.txt').errors.length, 'valid puzzle rejected');
+    assert(/same number/.test(P.parsePuzzle('Names: Amy, Ben\nPets: cat\nclue: x\n', 'a.txt').errors.join()), 'uneven categories accepted');
+    assert(/more than one category/.test(P.parsePuzzle('Names: Amy, Ben\nPets: Amy, dog\nclue: x\n', 'a.txt').errors.join()), 'duplicate item accepted');
+    assert(/answer/.test(P.parsePuzzle(base + 'answer: Amy, cat\n', 'a.txt').errors.join()), 'missing answer line accepted');
+    assert(/isn't one of the items/.test(P.parsePuzzle(base + 'answer: Amy, cat\nanswer: Ben, cow\n', 'a.txt').errors.join()), 'unknown item accepted');
+  },
+  'puzzle solver finds every answer'(L) {
+    const P = require('../puzzle.js');
+    const p = P.parsePuzzle('Names: Amy, Ben, Cy\nPets: cat, dog, eel\nclue: x\nanswer: Amy, cat\nanswer: Ben, dog\nanswer: Cy, eel\n', 'a.txt');
+    assert(P.countSolutions(p, [], 10).length === 6, 'no clues should allow 3! answers');
+    assert(P.countSolutions(p, [(h) => h.same('Amy', 'cat')], 10).length === 2, 'one clue should allow 2');
+  },
 };
+

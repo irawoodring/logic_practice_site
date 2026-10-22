@@ -11,10 +11,11 @@
   <button id="menu-btn" class="icon-btn" aria-label="Show problem list">☰</button>
   <div class="brand">
     <h1>Laker Logic Gym</h1>
-    <p>Practice proofs and truth tables</p>
+    <p>Proofs, truth tables and logic puzzles</p>
   </div>
-  <a href="#/glossary" id="vocab-link" class="text-btn">Vocabulary</a>
-  <button id="theme-btn" class="text-btn">Dark / light</button>
+  <a href="#/puzzles" id="puzzles-link" class="text-btn">Puzzles</a>
+  <a href="#/glossary" id="vocab-link" class="text-btn"><span class="long">Vocabulary</span><span class="short">Terms</span></a>
+  <button id="theme-btn" class="text-btn" aria-label="Switch dark or light mode"><span class="long">Dark / light</span><span class="short">Theme</span></button>
 </header>
 
 <div class="layout">
@@ -22,6 +23,7 @@
     <div id="progress-summary"></div>
     <div id="set-list"></div>
     <button id="custom-btn" class="side-link">✎ Try your own problem</button>
+    <a href="#/puzzles" class="side-link">🧩 Logic puzzles</a>
   </nav>
 
   <main id="main">
@@ -103,6 +105,45 @@
       <p class="error-text" id="custom-error"></p>
     </section>
 
+    <section id="puzzles-view" hidden>
+      <h2>Logic Puzzles</h2>
+      <p class="note">Each puzzle tells a short story and gives you clues. Use the grid to work out
+        which things go together. Every puzzle has exactly one answer.</p>
+      <div class="puzzle-list" id="puzzle-list"></div>
+    </section>
+
+    <section id="puzzle-view" hidden>
+      <div class="crumb"><a href="#/puzzles">← All puzzles</a></div>
+      <div class="puzzle-head">
+        <h2 id="puzzle-title"></h2>
+        <span id="puzzle-difficulty" class="badge"></span>
+        <span class="timer" title="Time spent on this puzzle">⏱ <span id="puzzle-timer">0:00</span></span>
+      </div>
+      <p class="puzzle-story" id="puzzle-story"></p>
+      <div id="puzzle-tools">
+        <details class="howto">
+          <summary>How to solve a grid puzzle</summary>
+          <p>Each square in the grid pairs one thing with another, like a person and a pet.
+            Click a square once for <strong>✕</strong> ("these don't go together"), again for
+            <strong>●</strong> ("these go together"), and a third time to clear it.</p>
+          <ul>
+            <li>Read a clue, mark what it rules out, then look for rows or columns with only one square left.</li>
+            <li>When you place a ●, the rest of its row and column in that box fill with ✕ automatically.
+              You can turn this off below.</li>
+            <li>Facts carry across boxes: if Amy has the cat and the cat is named Mochi, Amy's pet is Mochi.</li>
+          </ul>
+        </details>
+        <div class="proof-actions">
+          <button id="pz-undo" class="btn ghost">↶ Undo</button>
+          <button id="pz-check" class="btn ghost">Check for errors</button>
+          <button id="pz-clear" class="btn ghost">Start over</button>
+          <label class="toggle"><input type="checkbox" id="auto-x" checked /> Auto-fill ✕</label>
+        </div>
+      </div>
+      <div id="puzzle-body"></div>
+      <div class="status" id="puzzle-status" aria-live="polite"></div>
+    </section>
+
     <section id="glossary-view" hidden>
       <h2>Definitions &amp; Vocabulary</h2>
       <input id="glossary-search" class="glossary-search" type="search" autocomplete="off"
@@ -126,7 +167,9 @@
 </div>
 
 <script src="logic.js"></script>
+<script src="puzzle.js"></script>
 <script src="generated.js"></script>
+<script src="puzzles-ui.js"></script>
 <script src="app.js"></script>
 </body>
 </html>

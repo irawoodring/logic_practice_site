@@ -1,0 +1,20 @@
+title: Science Olympiad
+difficulty: Hard
+story: Five students from five different schools competed in different events at the regional Science Olympiad. Each earned a different score. Match each student with their event, score and school.
+Students: Pat, Quinn, Rosa, Sam, Tess
+Events: chemistry, astronomy, robotics, geology, anatomy
+Scores: 60, 70, 80, 90, 100
+Schools: Lincoln, Kennedy, Adams, Grant, Hayes
+clue: The robotics competitor scored 10 points higher than the student from Lincoln.
+clue: Rosa scored the lowest, and she isn't from Lincoln, Kennedy or Adams.
+clue: The student from Adams competed in geology.
+clue: Sam competed in anatomy and isn't from Hayes.
+clue: Quinn scored higher than Pat, who scored higher than Tess.
+clue: The astronomy competitor is from Kennedy.
+clue: Quinn isn't from Grant, and Pat didn't compete in astronomy.
+clue: Sam scored higher than Pat.
+answer: Pat, geology, 80, Adams
+answer: Quinn, robotics, 100, Hayes
+answer: Rosa, chemistry, 60, Grant
+answer: Sam, anatomy, 90, Lincoln
+answer: Tess, astronomy, 70, Kennedy

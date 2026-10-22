@@ -1,0 +1,12 @@
+title: The Science Fair
+difficulty: Easy
+story: Three students entered the school science fair, each with a different project, and each took home a different place. Figure out who built what and where each finished.
+Students: Amy, Ben, Cara
+Projects: robot, volcano, plant growth
+Places: 1st, 2nd, 3rd
+clue: Amy finished ahead of the student who built the robot.
+clue: Ben didn't build the robot.
+clue: The plant growth project came in 3rd.
+answer: Amy, volcano, 1st
+answer: Ben, plant growth, 3rd
+answer: Cara, robot, 2nd

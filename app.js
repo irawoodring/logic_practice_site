@@ -99,8 +99,12 @@
   // ------------------------------------------------------------- views
 
   function show(view) {
-    for (const v of ['problem-view', 'custom-view', 'glossary-view', 'welcome-view']) $(v).hidden = v !== view;
+    for (const v of ['problem-view', 'custom-view', 'glossary-view', 'puzzles-view', 'puzzle-view', 'welcome-view']) {
+      $(v).hidden = v !== view;
+    }
     $('vocab-link').classList.toggle('active', view === 'glossary-view');
+    $('puzzles-link').classList.toggle('active', view === 'puzzles-view' || view === 'puzzle-view');
+    if (view !== 'puzzle-view') window.PuzzleUI.stop();
     document.body.classList.remove('menu-open');
     window.scrollTo(0, 0);
   }
@@ -122,6 +126,16 @@
       if (p.error) { showCustom(m[2], p.error, tt); return; }
       p.uid = 'custom-' + p.id;
       openProblem(p, null, tt ? 'Your own truth table' : 'Your own argument', L.ALL_RULES);
+    } else if (h === '/puzzles') {
+      current = null;
+      renderSidebar();
+      show('puzzles-view');
+      window.PuzzleUI.renderList();
+    } else if ((m = /^\/puzzle\/(.+)$/.exec(h))) {
+      current = null;
+      renderSidebar();
+      show('puzzle-view');
+      window.PuzzleUI.open(m[1]);
     } else if (h === '/glossary') {
       current = null;
       renderSidebar();

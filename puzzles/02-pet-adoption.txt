@@ -1,0 +1,16 @@
+title: Adoption Day
+difficulty: Easy
+story: Four friends each adopted a pet from the local shelter on the same day, and each gave their new pet a name. Match each friend with their pet and its name.
+Friends: Dana, Eli, Fiona, Gus
+Pets: cat, dog, parrot, rabbit
+Names: Biscuit, Mochi, Pepper, Ziggy
+clue: Fiona adopted either the parrot or the cat.
+clue: The dog is named Ziggy.
+clue: Gus didn't adopt the rabbit or the dog, and his pet isn't named Biscuit.
+clue: Mochi is a rabbit.
+clue: Dana didn't adopt the dog.
+clue: Pepper isn't the parrot.
+answer: Dana, rabbit, Mochi
+answer: Eli, dog, Ziggy
+answer: Fiona, parrot, Biscuit
+answer: Gus, cat, Pepper

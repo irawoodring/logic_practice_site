@@ -450,3 +450,110 @@ mark { background: var(--warn-soft); color: inherit; border-radius: 2px; }
 .howto ul { padding-left: 20px; }
 .howto .math { font-family: var(--math); white-space: nowrap; }
 .row input::placeholder { color: var(--muted); opacity: 0.7; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif; font-size: 13px; }
+
+/* ---------- logic puzzles ---------- */
+a.side-link { display: block; text-decoration: none; font-size: 15px; }
+.puzzle-list { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 12px; }
+.puzzle-card {
+  display: block;
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 14px 16px;
+  color: var(--text);
+  text-decoration: none;
+}
+.puzzle-card:hover { border-color: var(--accent); }
+.puzzle-card.solved { border-color: var(--ok); }
+.puzzle-card.broken { border-color: var(--warn); }
+.puzzle-card-top { display: flex; justify-content: space-between; align-items: center; gap: 8px; }
+.puzzle-card-meta { margin: 6px 0 0; color: var(--muted); font-size: 13px; }
+.puzzle-card.solved .puzzle-card-meta { color: var(--ok); }
+.badge {
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  padding: 2px 8px;
+  border-radius: 999px;
+  background: var(--accent-soft);
+  color: var(--accent);
+  white-space: nowrap;
+}
+.badge.easy { background: var(--ok-soft); color: var(--ok); }
+.badge.hard { background: var(--bad-soft); color: var(--bad); }
+.badge.medium { background: var(--warn-soft); color: var(--warn); }
+.crumb a { color: var(--accent); text-decoration: none; }
+.puzzle-head { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; margin-top: 6px; }
+.puzzle-head h2 { margin: 0; }
+.timer { margin-left: auto; color: var(--muted); font-variant-numeric: tabular-nums; }
+.puzzle-story { margin: 8px 0 14px; }
+.toggle { display: flex; align-items: center; gap: 6px; font-size: 14px; color: var(--muted); margin-left: auto; cursor: pointer; }
+
+.puzzle-layout { display: grid; grid-template-columns: minmax(0, auto) minmax(220px, 1fr); gap: 20px; align-items: start; }
+.puzzle-left { min-width: 0; }
+a.btn { text-decoration: none; display: inline-block; }
+.grid-wrap { overflow-x: auto; background: var(--panel); border: 1px solid var(--border); border-radius: 8px; padding: 10px; }
+.pgrid { border-collapse: collapse; font-size: 13px; }
+.pgrid th { font-weight: 600; padding: 0; }
+.pgrid .corner { border: none; }
+.pgrid .cat-h { padding: 4px; text-align: center; color: var(--accent); }
+.pgrid .item-h { height: 96px; vertical-align: bottom; padding-bottom: 6px; }
+.pgrid .item-h span { writing-mode: vertical-rl; transform: rotate(180deg); white-space: nowrap; display: inline-block; }
+.pgrid .cat-v { width: 26px; color: var(--accent); }
+.pgrid .cat-v span { writing-mode: vertical-rl; transform: rotate(180deg); white-space: nowrap; display: inline-block; }
+.pgrid .item-r { text-align: right; padding: 0 8px 0 6px; white-space: nowrap; font-weight: 500; }
+.pgrid .hl { color: var(--accent); background: var(--accent-soft); }
+.pgrid td { padding: 0; border: 1px solid var(--border); }
+.pgrid td.bl { border-left: 2px solid var(--text); }
+.pgrid td.br { border-right: 2px solid var(--text); }
+.pgrid td.bt { border-top: 2px solid var(--text); }
+.pgrid td.bb { border-bottom: 2px solid var(--text); }
+.pgrid td.blank { border: none; }
+.pcell {
+  display: block;
+  width: 30px;
+  height: 30px;
+  border: none;
+  background: var(--panel);
+  font-size: 15px;
+  line-height: 30px;
+  padding: 0;
+}
+.pcell:hover { background: var(--accent-soft); }
+.pcell:focus { outline: 2px solid var(--accent); outline-offset: -2px; }
+.pcell.x { color: var(--bad); }
+.pcell.x.auto { color: var(--muted); opacity: 0.55; }
+.pcell.o { color: var(--ok); font-size: 18px; }
+.pcell.wrong { box-shadow: inset 0 0 0 2px var(--bad); background: var(--bad-soft); }
+
+.puzzle-right h3, .answers h3 { font-size: 15px; margin: 0 0 4px; }
+.note.small { font-size: 13px; margin: 0 0 8px; }
+.clues { margin: 0; padding-left: 22px; }
+.clues li { margin-bottom: 8px; cursor: pointer; border-radius: 4px; padding: 2px 4px; }
+.clues li:hover { background: var(--accent-soft); }
+.clues li.crossed { text-decoration: line-through; color: var(--muted); }
+.answers { margin-top: 16px; }
+.answers { overflow-x: auto; }
+.answers table { border-collapse: collapse; background: var(--panel); border: 1px solid var(--border); border-radius: 8px; font-size: 14px; }
+.answers th, .answers td { padding: 6px 12px; border-bottom: 1px solid var(--border); text-align: left; }
+.answers th { color: var(--muted); font-size: 12px; text-transform: uppercase; letter-spacing: 0.04em; }
+.answers td.empty { color: var(--muted); }
+.status.bad { background: var(--bad-soft); color: var(--bad); }
+
+@media (max-width: 1000px) {
+  .puzzle-layout { grid-template-columns: 1fr; }
+  .puzzle-right { order: -1; }
+}
+.text-btn .short { display: none; }
+@media (max-width: 820px) {
+  .topbar { gap: 5px; padding: 10px 8px; }
+  .brand { min-width: 0; }
+  .brand h1 { overflow: hidden; text-overflow: ellipsis; }
+  #menu-btn { flex: none; }
+  .brand h1 { font-size: 16px; }
+  .text-btn { padding: 6px 7px; font-size: 12px; flex: none; }
+  .brand h1 { white-space: nowrap; }
+  .text-btn .long { display: none; }
+  .text-btn .short { display: inline; }
+}

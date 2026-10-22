@@ -5,8 +5,11 @@
 //   node tests/check.js
 'use strict';
 const Logic = require('../logic.js');
-const { collect, collectGlossary } = require('../build.js');
+const path = require('path');
+const Puzzle = require('../puzzle.js');
+const { collect, collectGlossary, collectPuzzles } = require('../build.js');
 const SOLUTIONS = require('./solutions.js');
+const PUZZLE_CLUES = require('./puzzle_clues.js');
 const UNIT = require('./unit.js');
 
 const where = new Map();
@@ -48,6 +51,30 @@ console.log('\nGlossary');
 for (const topic of collectGlossary()) {
   topic.errors.forEach((e) => fail(`${topic.file}: ${e}`));
 }
+
+console.log('\nPuzzles');
+let puzzles = 0, unique = 0;
+const puzzleIds = new Map();
+for (const { file, text } of collectPuzzles()) {
+  puzzles++;
+  const p = Puzzle.parsePuzzle(text, path.basename(file));
+  p.errors.forEach((e) => fail(`${file}: ${e}`));
+  if (puzzleIds.has(p.id)) fail(`${file}: has the same title as ${puzzleIds.get(p.id)}`);
+  puzzleIds.set(p.id, file);
+  const tests = PUZZLE_CLUES[path.basename(file)];
+  if (p.errors.length || !tests) continue;
+  try {
+    const sols = Puzzle.countSolutions(p, tests, 2);
+    if (sols.length === 0) fail(`${file}: the clues rule out every answer`);
+    else if (sols.length > 1) fail(`${file}: the clues allow more than one answer`);
+    else if (JSON.stringify(Puzzle.toSolution(sols[0])) !== JSON.stringify(p.solution)) {
+      fail(`${file}: the clues' only answer doesn't match the answer lines`);
+    } else unique++;
+  } catch (e) {
+    fail(`${file}: ${e.message}`);
+  }
+}
+console.log(`  ${puzzles} puzzles, ${unique} proven to have exactly one answer`);
 
 console.log('\nChecker unit tests');
 for (const [name, fn] of Object.entries(UNIT)) {
